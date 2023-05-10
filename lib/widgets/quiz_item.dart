@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../models/quiz.dart';
+import '../providers/favorites_provider.dart';
 import '../widgets/quiz_item_trait.dart';
 
-class QuizItem extends StatelessWidget {
+class QuizItem extends ConsumerWidget {
   const QuizItem({
     super.key,
     required this.quiz,
@@ -19,8 +21,10 @@ class QuizItem extends StatelessWidget {
         quiz.complexity.name.substring(1);
   }
 
- @override
-  Widget build(BuildContext context) {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final favoriteQuiz = ref.watch(favoriteQuizProvider);
+    final isFavorite = favoriteQuiz.contains(quiz);
     return Card(
       margin: const EdgeInsets.all(8),
       shape: RoundedRectangleBorder(
@@ -70,6 +74,39 @@ class QuizItem extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        IconButton(
+                          onPressed: () {
+                            final wasAdded = ref
+                                .read(favoriteQuizProvider.notifier)
+                                .toggleQuizFavoriteStatus(quiz);
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  wasAdded
+                                      ? 'Quiz added as a favorite.'
+                                      : 'Quiz removed from favorites.',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            );
+                          },
+                          icon: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            transitionBuilder: (child, animation) {
+                              return RotationTransition(
+                                turns: Tween<double>(begin: 0.8, end: 1)
+                                    .animate(animation),
+                                child: child,
+                              );
+                            },
+                            child: Icon(
+                              isFavorite ? Icons.star : Icons.star_border,
+                              key: ValueKey(isFavorite),
+                            ),
+                          ),
+                        ),
                         const SizedBox(width: 12),
                         QuizItemTrait(
                           icon: Icons.castle_sharp,

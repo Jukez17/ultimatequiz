@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../data/questions.dart';
-import '../widgets/answer_button.dart';
+import './answer_button.dart';
 
-class QuestionsScreen extends StatefulWidget {
-  const QuestionsScreen({
+class Questions extends StatefulWidget {
+  const Questions({
     super.key,
     required this.onSelectAnswer,
   });
@@ -13,18 +13,16 @@ class QuestionsScreen extends StatefulWidget {
   final void Function(String answer) onSelectAnswer;
 
   @override
-  State<QuestionsScreen> createState() {
-    return _QuestionsScreenState();
+  State<Questions> createState() {
+    return _QuestionsState();
   }
 }
 
-class _QuestionsScreenState extends State<QuestionsScreen> {
+class _QuestionsState extends State<Questions> {
   var currentQuestionIndex = 0;
 
   void answerQuestion(String selectedAnswer) {
     widget.onSelectAnswer(selectedAnswer);
-    // currentQuestionIndex = currentQuestionIndex + 1;
-    // currentQuestionIndex += 1;
     setState(() {
       currentQuestionIndex++; // increments the value by 1
     });

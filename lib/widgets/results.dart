@@ -5,8 +5,8 @@ import '../data/questions.dart';
 import '../questions_summary/questions_summary.dart';
 
 
-class ResultsScreen extends StatelessWidget {
-  const ResultsScreen({
+class Results extends StatelessWidget {
+  const Results({
     super.key,
     required this.chosenAnswers,
     required this.onRestart,
@@ -17,7 +17,7 @@ class ResultsScreen extends StatelessWidget {
 
   List<Map<String, Object>> get summaryData {
     final List<Map<String, Object>> summary = [];
-
+    // TODO: Fix correct answer shown as wrong answer
     for (var i = 0; i < chosenAnswers.length; i++) {
       summary.add(
         {

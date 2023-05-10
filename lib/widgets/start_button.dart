@@ -1,29 +1,15 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-//import 'package:percent_indicator/percent_indicator.dart';
 
-class StartScreen extends StatefulWidget {
-  const StartScreen(this.startQuiz, {super.key});
+class StartQuizButton extends StatefulWidget {
+  const StartQuizButton(this.startQuiz, {super.key});
 
   final void Function() startQuiz;
 
   @override
-  State<StartScreen> createState() => _StartScreenState();
+  State<StartQuizButton> createState() => _StartQuizButtonState();
 }
 
-class _StartScreenState extends State<StartScreen> {
-  static const maxSeconds = 60;
-  int seconds = maxSeconds;
-  Timer? timer;
-
-  // void _startTimer() {
-  //   timer = Timer.periodic(Duration(seconds: 1), (_) {
-  //     setState(() {
-  //       seconds--;
-  //     });
-  //   });
-  // }
+class _StartQuizButtonState extends State<StartQuizButton> {
 
   @override
   Widget build(context) {
@@ -36,7 +22,6 @@ class _StartScreenState extends State<StartScreen> {
             width: 200.0,
             height: 60.0,
             child: OutlinedButton.icon(
-              //onPressed: _startTimer,
               onPressed: widget.startQuiz,
               style: OutlinedButton.styleFrom(
                 foregroundColor: Colors.white,
