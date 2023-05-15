@@ -17,18 +17,16 @@ class Results extends StatelessWidget {
 
   List<Map<String, Object>> get summaryData {
     final List<Map<String, Object>> summary = [];
-    // TODO: Fix correct answer shown as wrong answer
     for (var i = 0; i < chosenAnswers.length; i++) {
       summary.add(
         {
           'question_index': i,
           'question': questions[i].text,
-          'correct_answer': questions[i].answers[0],
+          'correct_answer': questions[i].correctAnswer,
           'user_answer': chosenAnswers[i]
         },
       );
     }
-
     return summary;
   }
 

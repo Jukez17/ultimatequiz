@@ -79,7 +79,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 fit: BoxFit.cover,
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 5),
             screenWidget,
           ],
         ),
