@@ -34,18 +34,18 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   List<QuizQuestion> getQuizQuestionsById(String quizId) {
-  // Replace this with your implementation to fetch the quiz questions based on the quiz ID
-  // Example implementation:
-  List<QuizQuestion> questions = [];
+    // Replace this with your implementation to fetch the quiz questions based on the quiz ID
+    // Example implementation:
+    List<QuizQuestion> questions = [];
 
-  if (quizId == 'q1') {
-    questions = dokkanEasy;
-  } else if (quizId == 'q2') {
-    questions = aoeMedium;
+    if (quizId == 'q1') {
+      questions = dokkanEasy;
+    } else if (quizId == 'q2') {
+      questions = aoeMedium;
+    }
+
+    return questions;
   }
-  
-  return questions;
-}
 
   void _chooseAnswer(String answer) {
     _selectedAnswers.add(answer);

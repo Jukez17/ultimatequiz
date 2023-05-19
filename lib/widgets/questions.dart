@@ -36,11 +36,13 @@ class _QuestionsState extends State<Questions> {
       // If the current question index exceeds the number of available questions,
       // display a different widget or handle the situation accordingly.
       return const Center(
-        child: Text('No more questions', style: TextStyle(
-          color: Colors.white
-        ),),
+        child: Text(
+          'No more questions',
+          style: TextStyle(color: Colors.white),
+        ),
       );
     }
+    
     final currentQuestion = widget.questions[currentQuestionIndex];
 
     return SizedBox(

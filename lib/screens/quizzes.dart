@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ultimatequiz/data/game_categories.dart';
 
 import '../models/quiz.dart';
 import '../screens/quiz.dart';
@@ -49,14 +50,55 @@ class QuizsScreen extends StatelessWidget {
     );
 
     if (quizs.isNotEmpty) {
-      content = ListView.builder(
-        itemCount: quizs.length,
-        itemBuilder: (ctx, index) => QuizItem(
-          quiz: quizs[index],
-          onSelectQuiz: (quiz) {
-            selectQuiz(context, quiz);
-          },
-        ),
+      content = Column(
+        children: [
+          SizedBox(
+            height: 80, // Adjust the height as desired
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: gameCategories.length,
+              itemBuilder: (ctx, index) => GestureDetector(
+                onTap: () {
+                  selectQuiz(context, quizs[index]);
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Center(
+                        child: Text(
+                          gameCategories[index].title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: quizs.length,
+              itemBuilder: (ctx, index) => QuizItem(
+                quiz: quizs[index],
+                onSelectQuiz: (quiz) {
+                  selectQuiz(context, quiz);
+                },
+              ),
+            ),
+          ),
+        ],
       );
     }
 
