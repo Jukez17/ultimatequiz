@@ -18,6 +18,7 @@ class QuizsScreen extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) => QuizScreen(
+          quizId: quiz.id,
           quiz: quiz,
         ),
       ),

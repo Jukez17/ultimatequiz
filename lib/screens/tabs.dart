@@ -44,7 +44,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     Widget activePage = CategoriesScreen(
       availableQuiz: availableQuiz,
     );
-    var activePageTitle = 'Quiz Categories';
+    var activePageTitle = 'Categories';
 
     if (_selectedPageIndex == 1) {
       final favoriteQuiz = ref.watch(favoriteQuizProvider);

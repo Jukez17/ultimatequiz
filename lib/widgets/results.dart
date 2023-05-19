@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../data/questions.dart';
+import '../models/quiz_question.dart';
 import '../questions_summary/questions_summary.dart';
 
 
 class Results extends StatelessWidget {
   const Results({
     super.key,
+    required this.questions,
     required this.chosenAnswers,
     required this.onRestart,
   });
 
+  final List<QuizQuestion> questions;
   final void Function() onRestart;
   final List<String> chosenAnswers;
 

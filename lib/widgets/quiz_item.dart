@@ -117,7 +117,7 @@ class QuizItem extends ConsumerWidget {
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

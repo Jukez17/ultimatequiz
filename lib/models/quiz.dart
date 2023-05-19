@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+//import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
@@ -16,6 +16,7 @@ class Quiz {
   const Quiz({
     required this.id,
     required this.categories,
+    required this.gameCategories,
     required this.title,
     required this.imageUrl,
     required this.duration,
@@ -28,6 +29,7 @@ class Quiz {
 
   final String id;
   final List<String> categories;
+  final List<String> gameCategories;
   final String title;
   final String imageUrl;
   final int duration;

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../data/questions.dart';
+import '../models/quiz_question.dart';
 import './answer_button.dart';
 
 class Questions extends StatefulWidget {
   const Questions({
     super.key,
+    required this.questions,
     required this.onSelectAnswer,
   });
 
+  final List<QuizQuestion> questions;
   final void Function(String answer) onSelectAnswer;
 
   @override
@@ -30,7 +32,16 @@ class _QuestionsState extends State<Questions> {
 
   @override
   Widget build(context) {
-    final currentQuestion = questions[currentQuestionIndex];
+    if (currentQuestionIndex >= widget.questions.length) {
+      // If the current question index exceeds the number of available questions,
+      // display a different widget or handle the situation accordingly.
+      return const Center(
+        child: Text('No more questions', style: TextStyle(
+          color: Colors.white
+        ),),
+      );
+    }
+    final currentQuestion = widget.questions[currentQuestionIndex];
 
     return SizedBox(
       width: double.infinity,

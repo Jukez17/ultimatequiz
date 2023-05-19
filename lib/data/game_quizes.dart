@@ -6,6 +6,9 @@ const quizGames = [
     categories: [
       'c3',
     ],
+    gameCategories: [
+      'gc1'
+    ],
     title: 'Dokkan Battle',
     complexity: Complexity.easy,
     imageUrl:
@@ -13,6 +16,23 @@ const quizGames = [
     duration: 6,
     isEasy: true,
     isMedium: false,
+    isHard: false,
+  ),
+  Quiz(
+    id: 'q2',
+    categories: [
+      'c3',
+    ],
+    gameCategories: [
+      'gc4'
+    ],
+    title: 'Age of Empires II: Definitive Edition',
+    complexity: Complexity.medium,
+    imageUrl:
+        'https://pbs.twimg.com/media/FgpsxkBX0AA66-a.jpg',
+    duration: 6,
+    isEasy: false,
+    isMedium: true,
     isHard: false,
   ),
 ];

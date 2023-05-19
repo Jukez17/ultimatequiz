@@ -74,23 +74,6 @@ class _MainDrawerState extends State<MainDrawer> {
           ),
           ListTile(
             leading: Icon(
-              Icons.quiz_sharp,
-              size: 26,
-              color: Theme.of(context).colorScheme.onBackground,
-            ),
-            title: Text(
-              'Quiz',
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                    fontSize: 24,
-                  ),
-            ),
-            onTap: () {
-              widget.onSelectScreen('quiz');
-            },
-          ),
-          ListTile(
-            leading: Icon(
               Icons.settings,
               size: 26,
               color: Theme.of(context).colorScheme.onBackground,

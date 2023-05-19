@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../data/questions.dart';
 import '../models/quiz.dart';
+import '../models/quiz_question.dart';
 import '../widgets/start_button.dart';
 import '../widgets/questions.dart';
 import '../widgets/results.dart';
@@ -9,10 +10,12 @@ import '../widgets/results.dart';
 class QuizScreen extends StatefulWidget {
   const QuizScreen({
     super.key,
+    required this.quizId,
     required this.quiz,
   });
 
   final Quiz quiz;
+  final String quizId;
 
   @override
   State<QuizScreen> createState() {
@@ -30,8 +33,25 @@ class _QuizScreenState extends State<QuizScreen> {
     });
   }
 
+  List<QuizQuestion> getQuizQuestionsById(String quizId) {
+  // Replace this with your implementation to fetch the quiz questions based on the quiz ID
+  // Example implementation:
+  List<QuizQuestion> questions = [];
+
+  if (quizId == 'q1') {
+    questions = dokkanEasy;
+  } else if (quizId == 'q2') {
+    questions = aoeMedium;
+  }
+  
+  return questions;
+}
+
   void _chooseAnswer(String answer) {
     _selectedAnswers.add(answer);
+
+    // Get the quiz questions based on the quiz ID
+    List<QuizQuestion> questions = getQuizQuestionsById(widget.quizId);
 
     if (_selectedAnswers.length == questions.length) {
       setState(() {
@@ -52,12 +72,14 @@ class _QuizScreenState extends State<QuizScreen> {
 
     if (_activeWidget == 'questions') {
       screenWidget = Questions(
+        questions: getQuizQuestionsById(widget.quizId),
         onSelectAnswer: _chooseAnswer,
       );
     }
 
     if (_activeWidget == 'results') {
       screenWidget = Results(
+        questions: getQuizQuestionsById(widget.quizId),
         chosenAnswers: _selectedAnswers,
         onRestart: restartQuiz,
       );
