@@ -17,6 +17,10 @@ const quizGames = [
     isEasy: true,
     isMedium: false,
     isHard: false,
+    mobileGame: true,
+    history: false,
+    sports: false,
+    realTimeStrategy: false,
   ),
   Quiz(
     id: 'q2',
@@ -34,5 +38,9 @@ const quizGames = [
     isEasy: false,
     isMedium: true,
     isHard: false,
+    mobileGame: false,
+    history: true,
+    sports: false,
+    realTimeStrategy: true,
   ),
 ];

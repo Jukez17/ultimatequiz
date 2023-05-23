@@ -6,7 +6,7 @@ import '../providers/filters_provider.dart';
 import '../screens/quiz_categories.dart';
 import '../screens/filters.dart';
 import '../screens/quizzes.dart';
-import '../widgets/main_drawer.dart';
+import '../widgets/drawer/main_drawer.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});

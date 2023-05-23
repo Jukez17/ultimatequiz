@@ -23,4 +23,9 @@ const quizCategories = [
     title: 'Movies',
     color: Colors.amber,
   ),
+  Category(
+    id: 'c5',
+    title: 'Science',
+    color: Colors.blue,
+  ),
 ];

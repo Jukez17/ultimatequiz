@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-import '../models/quiz.dart';
-import '../providers/favorites_provider.dart';
-import '../widgets/quiz_item_trait.dart';
+import '../../models/quiz.dart';
+import '../../providers/favorites_provider.dart';
+import 'quiz_item_trait.dart';
 
 class QuizItem extends ConsumerWidget {
   const QuizItem({

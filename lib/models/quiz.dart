@@ -25,6 +25,10 @@ class Quiz {
     required this.isEasy,
     required this.isMedium,
     required this.isHard,
+    required this.mobileGame,
+    required this.history,
+    required this.sports,
+    required this.realTimeStrategy,
   });
 
   final String id;
@@ -38,6 +42,10 @@ class Quiz {
   final bool isEasy;
   final bool isMedium;
   final bool isHard;
+  final bool mobileGame;
+  final bool history;
+  final bool sports;
+  final bool realTimeStrategy;
 
   // String get formattedDate {
   //   return formatter.format(date);

@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import '../data/questions.dart';
 import '../models/quiz.dart';
 import '../models/quiz_question.dart';
-import '../widgets/start_button.dart';
-import '../widgets/questions.dart';
-import '../widgets/results.dart';
+import '../widgets/buttons/start_button.dart';
+// Normal mode
+import '../widgets/quiz/questions.dart';
+import '../widgets/quiz/results.dart';
+// Speed mode
+import '../widgets/quiz/speed_questions.dart';
+import '../widgets/quiz/speed-results.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({
@@ -33,9 +37,13 @@ class _QuizScreenState extends State<QuizScreen> {
     });
   }
 
+  void _switchToSpeedQuiz() {
+    setState(() {
+      _activeWidget = 'speed-questions';
+    });
+  }
+
   List<QuizQuestion> getQuizQuestionsById(String quizId) {
-    // Replace this with your implementation to fetch the quiz questions based on the quiz ID
-    // Example implementation:
     List<QuizQuestion> questions = [];
 
     if (quizId == 'q1') {
@@ -55,7 +63,25 @@ class _QuizScreenState extends State<QuizScreen> {
 
     if (_selectedAnswers.length == questions.length) {
       setState(() {
-        _activeWidget = 'results';
+        if (_activeWidget == 'speed-questions') {
+          _activeWidget = 'speed-results';
+        }
+        if (_activeWidget == 'questions') {
+          _activeWidget = 'results';
+        }
+      });
+    }
+  }
+
+  void _chooseSpeedAnswer(String answer) {
+    _selectedAnswers.add(answer);
+
+    // Get the quiz questions based on the quiz ID
+    List<QuizQuestion> questions = getQuizQuestionsById(widget.quizId);
+
+    if (_selectedAnswers.length == questions.length) {
+      setState(() {
+        _activeWidget = 'speed-results';
       });
     }
   }
@@ -66,9 +92,15 @@ class _QuizScreenState extends State<QuizScreen> {
     });
   }
 
+  void restartSpeedQuiz() {
+    setState(() {
+      _activeWidget = 'speed-questions';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    Widget screenWidget = StartQuizButton(_switchScreen);
+    Widget screenWidget = StartQuizButton(_switchScreen, _switchToSpeedQuiz);
 
     if (_activeWidget == 'questions') {
       screenWidget = Questions(
@@ -82,6 +114,21 @@ class _QuizScreenState extends State<QuizScreen> {
         questions: getQuizQuestionsById(widget.quizId),
         chosenAnswers: _selectedAnswers,
         onRestart: restartQuiz,
+      );
+    }
+
+    if (_activeWidget == 'speed-questions') {
+      screenWidget = SpeedQuestions(
+        questions: getQuizQuestionsById(widget.quizId),
+        onSelectAnswer: _chooseSpeedAnswer,
+      );
+    }
+
+    if (_activeWidget == 'speed-results') {
+      screenWidget = SpeedResults(
+        questions: getQuizQuestionsById(widget.quizId),
+        chosenAnswers: _selectedAnswers,
+        onRestart: restartSpeedQuiz,
       );
     }
 

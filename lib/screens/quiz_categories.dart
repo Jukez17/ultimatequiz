@@ -4,13 +4,13 @@ import '../data/quiz_categories.dart';
 import '../models/category.dart';
 import '../models/quiz.dart';
 import '../screens/quizzes.dart';
-import '../widgets/quiz_category_item.dart';
+import '../widgets/quiz/quiz_category_item.dart';
 
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({
-    super.key,
+    Key? key,
     required this.availableQuiz,
-  });
+  }) : super(key: key);
 
   final List<Quiz> availableQuiz;
 
@@ -54,44 +54,53 @@ class _CategoriesScreenState extends State<CategoriesScreen>
           quizs: filteredQuizs,
         ),
       ),
-    ); // Navigator.push(context, route)
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animationController,
-      child: GridView(
-        padding: const EdgeInsets.all(24),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 3 / 2,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20,
-        ),
-        children: [
-          // availableCategories.map((category) => CategoryGridItem(category: category)).toList()
-          for (final category in quizCategories)
-            CategoryGridItem(
-              category: category,
-              onSelectCategory: () {
-                _selectCategory(context, category);
-              },
-            )
-        ],
-      ),
-      builder: (context, child) => SlideTransition(
-        position: Tween(
-          begin: const Offset(0, 0.3),
-          end: const Offset(0, 0),
-        ).animate(
-          CurvedAnimation(
-            parent: _animationController,
-            curve: Curves.easeInOut,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isPortrait = constraints.maxWidth < 600;
+
+        // Sort the categories alphabetically
+        final sortedCategories = quizCategories.toList()
+          ..sort((a, b) => a.title.compareTo(b.title));
+
+        return AnimatedBuilder(
+          animation: _animationController,
+          child: GridView(
+            padding: const EdgeInsets.all(24),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: isPortrait ? 2 : 4,
+              childAspectRatio: 3 / 2,
+              crossAxisSpacing: 20,
+              mainAxisSpacing: 20,
+            ),
+            children: [
+              for (final category in sortedCategories)
+                CategoryGridItem(
+                  category: category,
+                  onSelectCategory: () {
+                    _selectCategory(context, category);
+                  },
+                ),
+            ],
           ),
-        ),
-        child: child,
-      ),
+          builder: (context, child) => SlideTransition(
+            position: Tween(
+              begin: const Offset(0, 0.3),
+              end: const Offset(0, 0),
+            ).animate(
+              CurvedAnimation(
+                parent: _animationController,
+                curve: Curves.easeInOut,
+              ),
+            ),
+            child: child,
+          ),
+        );
+      },
     );
   }
 }

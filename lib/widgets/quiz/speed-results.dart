@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../models/quiz_question.dart';
-import '../questions_summary/questions_summary.dart';
+import '../../models/quiz_question.dart';
+import '../../questions_summary/questions_summary.dart';
 
 
-class Results extends StatelessWidget {
-  const Results({
+class SpeedResults extends StatelessWidget {
+  const SpeedResults({
     super.key,
     required this.questions,
     required this.chosenAnswers,
@@ -70,7 +70,7 @@ class Results extends StatelessWidget {
                 foregroundColor: Colors.white,
               ),
               icon: const Icon(Icons.refresh),
-              label: const Text('Restart Quiz!'),
+              label: const Text('Restart Speed Quiz!'),
             )
           ],
         ),
