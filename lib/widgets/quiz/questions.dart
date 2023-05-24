@@ -50,7 +50,7 @@ class _QuestionsState extends State<Questions> {
         SizedBox(
           width: double.infinity,
           child: Container(
-            margin: const EdgeInsets.all(40),
+            margin: const EdgeInsets.all(10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,

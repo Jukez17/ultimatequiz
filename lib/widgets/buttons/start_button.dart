@@ -14,11 +14,15 @@ class _StartQuizButtonState extends State<StartQuizButton>
 
   @override
   Widget build(context) {
+    final orientation = MediaQuery.of(context).orientation;
+    final isLandscape = orientation == Orientation.landscape;
+
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(height: 80),
+          if (!isLandscape)
+            const SizedBox(height: 80),
           SizedBox(
             width: 200.0,
             height: 60.0,

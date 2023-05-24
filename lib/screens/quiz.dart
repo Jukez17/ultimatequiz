@@ -13,18 +13,16 @@ import '../widgets/quiz/speed-results.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({
-    super.key,
+    Key? key,
     required this.quizId,
     required this.quiz,
-  });
+  }) : super(key: key);
 
   final Quiz quiz;
   final String quizId;
 
   @override
-  State<QuizScreen> createState() {
-    return _QuizScreenState();
-  }
+  _QuizScreenState createState() => _QuizScreenState();
 }
 
 class _QuizScreenState extends State<QuizScreen> {
@@ -100,6 +98,19 @@ class _QuizScreenState extends State<QuizScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final orientation = MediaQuery.of(context).orientation;
+    final isLandscape = orientation == Orientation.landscape;
+
+    Widget imageWidget = Hero(
+      tag: widget.quiz.id,
+      child: Image.network(
+        widget.quiz.imageUrl,
+        height: 210,
+        width: double.infinity,
+        fit: BoxFit.cover,
+      ),
+    );
+
     Widget screenWidget = StartQuizButton(_switchScreen, _switchToSpeedQuiz);
 
     if (_activeWidget == 'questions') {
@@ -133,26 +144,53 @@ class _QuizScreenState extends State<QuizScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.quiz.title),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
+  appBar: AppBar(
+    title: Text(widget.quiz.title),
+  ),
+  body: isLandscape
+      ? Row(
           children: [
-            Hero(
-              tag: widget.quiz.id,
-              child: Image.network(
-                widget.quiz.imageUrl,
-                height: 210,
-                width: double.infinity,
-                fit: BoxFit.cover,
+            Expanded(
+              flex: 1,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    imageWidget,
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 5),
-            screenWidget,
+            Expanded(
+              flex: 1,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: screenWidget,
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
+        )
+      : SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              imageWidget,
+              const SizedBox(height: 5),
+              Flexible(
+                fit: FlexFit.loose,
+                child: screenWidget,
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+);
+
   }
 }
