@@ -7,6 +7,7 @@ import '../screens/quiz_categories.dart';
 import '../screens/filters.dart';
 import '../screens/quizzes.dart';
 import '../screens/profile.dart';
+import '../screens/leaderboards.dart';
 import '../widgets/drawer/main_drawer.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
@@ -48,12 +49,15 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     var activePageTitle = 'Categories';
 
     if (_selectedPageIndex == 1) {
+      activePage = LeaderboardsScreen(filteredQuizs: availableQuiz);
+      activePageTitle = 'Leaderboards';
+    } else if (_selectedPageIndex == 2) {
       final favoriteQuiz = ref.watch(favoriteQuizProvider);
       activePage = QuizsScreen(
         quizs: favoriteQuiz,
       );
       activePageTitle = 'Your Favorites';
-    } else if (_selectedPageIndex == 2) {
+    } else if (_selectedPageIndex == 3) {
       activePage = ProfileScreen();
       activePageTitle = 'Profile';
     }
@@ -69,10 +73,18 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
         currentIndex: _selectedPageIndex,
+        selectedItemColor: Colors.white, // Color of the selected icon and label
+        unselectedItemColor:
+            Colors.grey, // Color of the unselected icon and label
+        backgroundColor: Colors.blue, // Background color of the navigation bar
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.set_meal),
             label: 'Categories',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.leaderboard_rounded),
+            label: 'Leaderboards',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.star),

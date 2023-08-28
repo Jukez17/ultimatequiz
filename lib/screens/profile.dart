@@ -8,18 +8,10 @@ class ProfileScreen extends StatelessWidget {
   ProfileScreen({
     super.key,
   });
-
-  Future<void> _updateUserData(int gamesPlayed, int fastestTime) async {
-    await FirebaseFirestore.instance.collection('users').doc(user!.uid).update({
-      'games_played': gamesPlayed,
-      'fastest_time': fastestTime,
-    });
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Center(
         child: FutureBuilder<DocumentSnapshot>(
           future: FirebaseFirestore.instance
