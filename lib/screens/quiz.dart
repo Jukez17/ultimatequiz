@@ -28,6 +28,7 @@ class QuizScreen extends StatefulWidget {
 class _QuizScreenState extends State<QuizScreen> {
   List<String> _selectedAnswers = [];
   var _activeWidget = 'start-quiz';
+  double totalTimeTaken = 0.0;
 
   void _switchScreen() {
     setState(() {
@@ -38,6 +39,7 @@ class _QuizScreenState extends State<QuizScreen> {
   void _switchToSpeedQuiz() {
     setState(() {
       _activeWidget = 'speed-questions';
+      totalTimeTaken = 0; // Reset the total time taken for the speed quiz
     });
   }
 
@@ -71,7 +73,7 @@ class _QuizScreenState extends State<QuizScreen> {
     }
   }
 
-  void _chooseSpeedAnswer(String answer) {
+  void _chooseSpeedAnswer(String answer, double timeTaken) {
     _selectedAnswers.add(answer);
 
     // Get the quiz questions based on the quiz ID
@@ -80,6 +82,7 @@ class _QuizScreenState extends State<QuizScreen> {
     if (_selectedAnswers.length == questions.length) {
       setState(() {
         _activeWidget = 'speed-results';
+        totalTimeTaken += timeTaken;
       });
     }
   }
@@ -93,6 +96,7 @@ class _QuizScreenState extends State<QuizScreen> {
   void restartSpeedQuiz() {
     setState(() {
       _activeWidget = 'speed-questions';
+      totalTimeTaken = 0;
     });
   }
 
@@ -100,16 +104,6 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget build(BuildContext context) {
     final orientation = MediaQuery.of(context).orientation;
     final isLandscape = orientation == Orientation.landscape;
-
-    Widget imageWidget = Hero(
-      tag: widget.quiz.id,
-      child: Image.network(
-        widget.quiz.imageUrl,
-        height: 210,
-        width: double.infinity,
-        fit: BoxFit.cover,
-      ),
-    );
 
     Widget screenWidget = StartQuizButton(_switchScreen, _switchToSpeedQuiz);
 
@@ -132,65 +126,54 @@ class _QuizScreenState extends State<QuizScreen> {
       screenWidget = SpeedQuestions(
         questions: getQuizQuestionsById(widget.quizId),
         onSelectAnswer: _chooseSpeedAnswer,
+        selectedAnswers: _selectedAnswers,
       );
     }
 
     if (_activeWidget == 'speed-results') {
       screenWidget = SpeedResults(
+        quizTitle: widget.quiz.title,
         questions: getQuizQuestionsById(widget.quizId),
         chosenAnswers: _selectedAnswers,
         onRestart: restartSpeedQuiz,
+        totalTimeTaken: totalTimeTaken,
       );
     }
 
     return Scaffold(
-  appBar: AppBar(
-    title: Text(widget.quiz.title),
-  ),
-  body: isLandscape
-      ? Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    imageWidget,
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: screenWidget,
+      appBar: AppBar(
+        title: Text(widget.quiz.title),
+      ),
+      body: isLandscape
+          ? Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          fit: FlexFit.loose,
+                          child: screenWidget,
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
+              ],
+            )
+          : SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: screenWidget,
+                  ),
+                ],
               ),
             ),
-          ],
-        )
-      : SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              imageWidget,
-              const SizedBox(height: 5),
-              Flexible(
-                fit: FlexFit.loose,
-                child: screenWidget,
-              ),
-            ],
-          ),
-        ),
-);
-
+    );
   }
 }

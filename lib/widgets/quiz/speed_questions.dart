@@ -10,10 +10,12 @@ class SpeedQuestions extends StatefulWidget {
     Key? key,
     required this.questions,
     required this.onSelectAnswer,
+    required this.selectedAnswers,
   }) : super(key: key);
 
   final List<QuizQuestion> questions;
-  final void Function(String answer) onSelectAnswer;
+  final void Function(String answer, double timeTaken) onSelectAnswer;
+  final List<String> selectedAnswers;
 
   @override
   State<SpeedQuestions> createState() {
@@ -27,7 +29,9 @@ class _SpeedQuestionsState extends State<SpeedQuestions>
   //late QuizTimer _quizTimer;
   late AnimationController _animationController;
   var _seconds = 10;
+  var totalTimeTaken = 0;
   bool isTimerFinished = false;
+  bool showRestartButton = false;
 
   @override
   void initState() {
@@ -43,6 +47,7 @@ class _SpeedQuestionsState extends State<SpeedQuestions>
         // Handle timer finished event if needed
         setState(() {
           isTimerFinished = true;
+          showRestartButton = true;
         });
         // Call a function or perform any action you need
       }
@@ -60,6 +65,10 @@ class _SpeedQuestionsState extends State<SpeedQuestions>
     _animationController.reset();
     _animationController.duration = Duration(seconds: _seconds);
     _animationController.reverse(from: 1.0);
+
+    int remainingSeconds = (_animationController.value * _seconds).ceil();
+    int remainingTimeForQuestion = _seconds - remainingSeconds;
+    totalTimeTaken += remainingTimeForQuestion;
   }
 
   @override
@@ -69,15 +78,29 @@ class _SpeedQuestionsState extends State<SpeedQuestions>
   }
 
   void answerQuestion(String selectedAnswer) {
-    widget.onSelectAnswer(selectedAnswer);
+    double remainingSeconds = _animationController.value * _seconds;
+    double remainingTimeForQuestion = _seconds - remainingSeconds;
+    widget.onSelectAnswer(selectedAnswer, remainingTimeForQuestion);
     setState(() {
       currentQuestionIndex++; // increments the value by 1
     });
     resetTimer();
   }
 
+  void restartQuiz() {
+    setState(() {
+      currentQuestionIndex = 0;
+      widget.selectedAnswers.clear();
+      showRestartButton = false;
+    });
+    resetTimer();
+  }
+
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
+    final orientation = MediaQuery.of(context).orientation;
+    final isLandscape = orientation == Orientation.landscape;
+
     if (currentQuestionIndex >= widget.questions.length) {
       // If the current question index exceeds the number of available questions,
       // display a different widget or handle the situation accordingly.
@@ -91,46 +114,110 @@ class _SpeedQuestionsState extends State<SpeedQuestions>
 
     final currentQuestion = widget.questions[currentQuestionIndex];
 
-    return Column(
-      children: [
-        QuizTimer(
-          duration: Duration(seconds: _seconds),
-          animationController: _animationController,
-        ),
-        SizedBox(
-          width: double.infinity,
-          child: Container(
-            margin: const EdgeInsets.all(40),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  currentQuestion.text,
-                  style: GoogleFonts.lato(
-                    color: const Color.fromARGB(255, 201, 153, 251),
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+    return isLandscape
+        ? Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    QuizTimer(
+                      duration: Duration(seconds: _seconds),
+                      animationController: _animationController,
+                    ),
+                    const SizedBox(height: 5),
+                    ElevatedButton(
+                      onPressed: isTimerFinished ? restartQuiz : null,
+                      child: const Text('Restart Quiz'),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  margin: const EdgeInsets.all(40),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        currentQuestion.text,
+                        style: GoogleFonts.lato(
+                          color: const Color.fromARGB(255, 201, 153, 251),
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      ...currentQuestion.shuffledAnswers.map(
+                        (answer) {
+                          return SpeedAnswerButton(
+                            answerText: answer,
+                            onTap: () {
+                              if (!isTimerFinished) {
+                                return;
+                              }
+                              answerQuestion(answer);
+                            },
+                            isTimerRunning: !isTimerFinished,
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                  textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 30),
-                ...currentQuestion.shuffledAnswers.map(
-                  (answer) {
-                    return SpeedAnswerButton(
-                      answerText: answer,
-                      onTap: () {
-                        answerQuestion(answer);
-                      },
-                      isTimerRunning: !isTimerFinished,
-                    );
-                  },
+              ),
+            ],
+          )
+        : Column(
+            children: [
+              QuizTimer(
+                duration: Duration(seconds: _seconds),
+                animationController: _animationController,
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Container(
+                  margin: const EdgeInsets.all(40),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        currentQuestion.text,
+                        style: GoogleFonts.lato(
+                          color: const Color.fromARGB(255, 201, 153, 251),
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 30),
+                      ...currentQuestion.shuffledAnswers.map(
+                        (answer) {
+                          return SpeedAnswerButton(
+                            answerText: answer,
+                            onTap: () {
+                              if (!isTimerFinished) {
+                                return;
+                              }
+                              answerQuestion(answer);
+                            },
+                            isTimerRunning: !isTimerFinished,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
+              ),
+              ElevatedButton(
+                onPressed: isTimerFinished ? restartQuiz : null,
+                child: const Text('Restart Quiz'),
+              ),
+            ],
+          );
   }
 }

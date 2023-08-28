@@ -6,6 +6,7 @@ import '../providers/filters_provider.dart';
 import '../screens/quiz_categories.dart';
 import '../screens/filters.dart';
 import '../screens/quizzes.dart';
+import '../screens/profile.dart';
 import '../widgets/drawer/main_drawer.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
@@ -52,6 +53,9 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         quizs: favoriteQuiz,
       );
       activePageTitle = 'Your Favorites';
+    } else if (_selectedPageIndex == 2) {
+      activePage = ProfileScreen();
+      activePageTitle = 'Profile';
     }
 
     return Scaffold(
@@ -73,6 +77,10 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.star),
             label: 'Favorites',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_2_rounded),
+            label: 'Profile',
           ),
         ],
       ),

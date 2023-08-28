@@ -57,6 +57,9 @@ class QuizTimerState extends State<QuizTimer>
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final timerRadius = isLandscape ? MediaQuery.of(context).size.width * 0.08 : MediaQuery.of(context).size.width * 0.14;
+
     return AnimatedBuilder(
       animation: _animationController,
       builder: (context, child) {
@@ -72,7 +75,7 @@ class QuizTimerState extends State<QuizTimer>
         }
 
         return CircularPercentIndicator(
-          radius: MediaQuery.of(context).size.width * 0.14,
+          radius: timerRadius,
           lineWidth: 10.0,
           percent: _animationController.value,
           center: Text(

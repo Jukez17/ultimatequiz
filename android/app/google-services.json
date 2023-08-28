@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "754099649306",
+    "project_id": "ultimatequiz-e991d",
+    "storage_bucket": "ultimatequiz-e991d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754099649306:android:da8e6dc61359c0b4834aa3",
+        "android_client_info": {
+          "package_name": "com.thecodingelf.ultimatequiz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754099649306-v8fa5r5a9dgh2cb7o2623c4vm970cdpe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoriHcx62MzQv_oUP8Zr8A4sDmknTZLTw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754099649306-v8fa5r5a9dgh2cb7o2623c4vm970cdpe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

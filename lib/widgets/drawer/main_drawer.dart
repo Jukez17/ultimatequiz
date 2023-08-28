@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MainDrawer extends StatefulWidget {
   const MainDrawer({super.key, required this.onSelectScreen});
@@ -11,6 +12,7 @@ class MainDrawer extends StatefulWidget {
 }
 
 class _MainDrawerState extends State<MainDrawer> {
+  final _auth = FirebaseAuth.instance;
   PackageInfo _packageInfo = PackageInfo(
     appName: 'Unknown',
     packageName: 'Unknown',
@@ -87,6 +89,31 @@ class _MainDrawerState extends State<MainDrawer> {
             ),
             onTap: () {
               widget.onSelectScreen('filters');
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.logout_rounded,
+              size: 26,
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+            title: Text(
+              'Log Out',
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    color: Theme.of(context).colorScheme.onBackground,
+                    fontSize: 24,
+                  ),
+            ),
+            onTap: () {
+              _auth.signOut();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  backgroundColor: Colors.green,
+                  duration: Duration(seconds: 3),
+                  content: Text('Log out succesful'),
+                  showCloseIcon: true,
+                ),
+              );
             },
           ),
           const Spacer(),

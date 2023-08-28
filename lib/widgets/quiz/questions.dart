@@ -32,6 +32,9 @@ class _QuestionsState extends State<Questions> {
 
   @override
   Widget build(context) {
+    final orientation = MediaQuery.of(context).orientation;
+    final isLandscape = orientation == Orientation.landscape;
+
     if (currentQuestionIndex >= widget.questions.length) {
       // If the current question index exceeds the number of available questions,
       // display a different widget or handle the situation accordingly.
@@ -42,42 +45,83 @@ class _QuestionsState extends State<Questions> {
         ),
       );
     }
-    
+
     final currentQuestion = widget.questions[currentQuestionIndex];
 
-    return Column(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          child: Container(
-            margin: const EdgeInsets.all(10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  currentQuestion.text,
-                  style: GoogleFonts.lato(
-                    color: const Color.fromARGB(255, 201, 153, 251),
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+    return isLandscape
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                flex: 2,
+                child: Container(
+                  margin: const EdgeInsets.all(10),
+                  child: Text(
+                    currentQuestion.text,
+                    style: GoogleFonts.lato(
+                      color: const Color.fromARGB(255, 201, 153, 251),
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 30),
-                ...currentQuestion.shuffledAnswers.map((answer) {
-                  return AnswerButton(
-                    answerText: answer,
-                    onTap: () {
-                      answerQuestion(answer);
-                    },
-                  );
-                })
+              ),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  margin: const EdgeInsets.all(10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: currentQuestion.shuffledAnswers.map((answer) {
+                      return AnswerButton(
+                        answerText: answer,
+                        onTap: () {
+                          answerQuestion(answer);
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ],
+          )
+        : Center(
+          child: Column(
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: Container(
+                    margin: const EdgeInsets.all(10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          currentQuestion.text,
+                          style: GoogleFonts.lato(
+                            color: const Color.fromARGB(255, 201, 153, 251),
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 30),
+                        ...currentQuestion.shuffledAnswers.map((answer) {
+                          return AnswerButton(
+                            answerText: answer,
+                            onTap: () {
+                              answerQuestion(answer);
+                            },
+                          );
+                        })
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
-        ),
-      ],
-    );
+        );
   }
 }
