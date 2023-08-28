@@ -19,7 +19,7 @@ class GameLeaderboard extends StatelessWidget {
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(); // Loading indicator while data is being fetched
+          return const CircularProgressIndicator();
         }
 
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
@@ -27,6 +27,14 @@ class GameLeaderboard extends StatelessWidget {
         }
 
         final leaderboardData = snapshot.data!.docs;
+
+        // Sort the leaderboard data by total time in ascending order
+        final sortedLeaderboardData = [...leaderboardData];
+        sortedLeaderboardData.sort((a, b) {
+          final timeA = a['total_time'];
+          final timeB = b['total_time'];
+          return timeA.compareTo(timeB);
+        });
 
         return Container(
           padding: const EdgeInsets.all(16.0),
@@ -36,14 +44,32 @@ class GameLeaderboard extends StatelessWidget {
               const SizedBox(height: 10.0),
               ListView.builder(
                 shrinkWrap: true,
-                itemCount: leaderboardData.length,
+                itemCount: sortedLeaderboardData.length,
                 itemBuilder: (context, index) {
-                  final entry = leaderboardData[index].data();
+                  final entry = sortedLeaderboardData[index];
                   final username = entry['username'];
                   final correctAnswers = entry['correct_answers'];
                   final totalQuestions =
                       correctAnswers + entry['wrong_answers'];
                   final totalTime = entry['total_time'];
+
+                  // Determine the trophy emoji and color based on ranking
+                  IconData trophyIcon;
+                  Color trophyColor;
+                  if (index == 0) {
+                    trophyIcon = Icons.emoji_events;
+                    trophyColor = Colors.yellow; // Gold Trophy
+                  } else if (index == 1) {
+                    trophyIcon = Icons.emoji_events;
+                    trophyColor = Colors.grey; // Silver Trophy
+                  } else if (index == 2) {
+                    trophyIcon = Icons.emoji_events;
+                    trophyColor = Colors.brown; // Bronze Trophy
+                  } else {
+                    trophyIcon =
+                        Icons.emoji_events; // No Trophy for other ranks
+                    trophyColor = Colors.transparent; // No color
+                  }
 
                   return Card(
                     elevation: 2.0,
@@ -70,6 +96,11 @@ class GameLeaderboard extends StatelessWidget {
                             ),
                           ),
                         ],
+                      ),
+                      trailing: Icon(
+                        trophyIcon,
+                        color: trophyColor,
+                        size: 40.0, // Customize trophy color
                       ),
                     ),
                   );
